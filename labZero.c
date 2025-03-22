@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
+#include <fenv.h>
 
 #include "utils.h"
 #include "ZeroFuncao.h"
 
 int main ()
 {
+	fesetround(FE_DOWNWARD);
 
 	real_t a, b;
   	Polinomio pol;
@@ -21,9 +23,35 @@ int main ()
 
 	real_t raiz;
 	int iteracoes = 0;
-	real_t erro = newtonRaphson(pol, (a + b)/2, 0, &iteracoes, &raiz, calcPolinomio_rapido);
+	double tempo;
 
-	printf("raiz = %.15e\niteracoes = %d\nerro = %.15e\n", raiz, iteracoes, erro);
+	printf("RAPIDO\n\n");
+	for (int i = 1; i <= 3; i++) {
+		tempo = timestamp();
+		real_t valor_crit = bisseccao(pol, a, b, i, &iteracoes, &raiz, calcPolinomio_rapido);
+		tempo = timestamp() - tempo;
+		printf("bissec %.15e %.15e %d %.8e\n", raiz, valor_crit, iteracoes, tempo);
+	}
+	for (int i = 1; i <= 3; i++) {
+		tempo = timestamp();
+		real_t valor_crit = newtonRaphson(pol, (a + b)/2, i, &iteracoes, &raiz, calcPolinomio_rapido);
+		tempo = timestamp() - tempo;
+		printf("newton %.15e %.15e %d %.8e\n", raiz, valor_crit, iteracoes, tempo);
+	}
+	printf("\nLENTO\n\n");
+	for (int i = 1; i <= 3; i++) {
+		tempo = timestamp();
+		real_t valor_crit = bisseccao(pol, a, b, i, &iteracoes, &raiz, calcPolinomio_lento);
+		tempo = timestamp() - tempo;
+		printf("bissec %.15e %.15e %d %.8e\n", raiz, valor_crit, iteracoes, tempo);
+	}
+	for (int i = 1; i <= 3; i++) {
+		tempo = timestamp();
+		real_t valor_crit = newtonRaphson(pol, (a + b)/2, i, &iteracoes, &raiz, calcPolinomio_lento);
+		tempo = timestamp() - tempo;
+		printf("newton %.15e %.15e %d %.8e\n", raiz, valor_crit, iteracoes, tempo);
+	}
+
   return 0;
 }
 
