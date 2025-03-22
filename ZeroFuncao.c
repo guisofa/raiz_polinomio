@@ -5,9 +5,27 @@
 #include "ZeroFuncao.h"
 
 // Retorna valor do erro quando método finalizou. Este valor depende de tipoErro
-real_t newtonRaphson (Polinomio p, real_t x0, int criterioParada, int *it, real_t *raiz)
+real_t newtonRaphson (Polinomio p, real_t x0, int criterioParada, int *it, real_t *raiz,
+                      void calcPolinomio(Polinomio, real_t, real_t*, real_t*))
 {
+    *it = 0;
+    real_t x = x0;
+    real_t func_val = 0, der_val = 0;
+    real_t erro = 0;
 
+    do {
+        calcPolinomio(p, x, &func_val, &der_val);
+
+        real_t x_next = x - func_val/der_val;
+
+        (*it)++;
+        erro = fabs(x_next - x);
+        x = x_next;
+    } while (*it < 500);
+
+    *raiz = x;
+    
+    return erro;
 }
 
 

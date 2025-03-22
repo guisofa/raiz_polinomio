@@ -19,7 +19,7 @@ typedef struct {
 // Métodos
 // Retornam valor do erro quando método finalizou. Este valor depende de tipoErro
 
-real_t newtonRaphson (Polinomio p, real_t x0, int criterioParada, int *it, real_t *raiz);
+real_t newtonRaphson (Polinomio p, real_t x0, int criterioParada, int *it, real_t *raiz, void calcPolinomio(Polinomio, real_t, real_t*, real_t*));
 real_t bisseccao (Polinomio p, real_t a, real_t b, int criterioParada, int *it, real_t *raiz);
 
 // Cálculo de Polinômios
